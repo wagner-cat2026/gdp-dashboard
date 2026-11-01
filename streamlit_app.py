@@ -69,7 +69,17 @@ def buscar_agendas():
         return pd.DataFrame()
 
 def salvar_agenda(dados):
-    supabase.table("agendamentos").insert(dados).execute()
+    try:
+    # Mostra o que está tentando salvar
+    st.write("Tentando salvar:", dados)
+    dados_limpos = {k: str(v) for k,v in dados.items() if v is not None}
+    res = supabase.table("agendamentos").insert(dados_limpos).execute()
+    st.success("Salvou!")
+    return res
+except Exception as e:
+    st.error(f"ERRO REAL DO BANCO: {e}")
+    st.json(dados)
+    raise
 
 def atualizar_status(id_a, status):
     supabase.table("agendamentos").update({"status": status}).eq("id", id_a).execute()
