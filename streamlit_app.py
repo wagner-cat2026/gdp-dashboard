@@ -1,4 +1,15 @@
 import streamlit as st
+USUARIOS = {"comercial@cat":{"senha":"cat123","setor":"Comercial"},"adm@cat":{"senha":"cat123","setor":"ADM"},"seguranca@cat":{"senha":"cat123","setor":"Segurança"},"clinica@cat":{"senha":"cat123","setor":"Clínica"},"rh@cat":{"senha":"cat123","setor":"RH"}}
+if "logado" not in st.session_state: st.session_state.logado=False
+if not st.session_state.logado:
+    st.set_page_config(page_title="CAT", page_icon="🛡️")
+    st.markdown("<div style='background:#0A2342;padding:15px;border-radius:10px'><h1 style='color:white;margin:0'>CAT - Segurança e Saúde no Trabalho</h1></div>", unsafe_allow_html=True)
+    u=st.text_input("Usuário"); s=st.text_input("Senha",type="password")
+    if st.button("Entrar"):
+        if u in USUARIOS and USUARIOS[u]["senha"]==s:
+            st.session_state.logado=True; st.session_state.setor=USUARIOS[u]["setor"]; st.rerun()
+        else: st.error("Login inválido")
+    st.stop()
 import requests
 from datetime import datetime
 from supabase import create_client
