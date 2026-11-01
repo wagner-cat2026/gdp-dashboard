@@ -1,151 +1,65 @@
 import streamlit as st
-import pandas as pd
-import math
-from pathlib import Path
+import requests
+from datetime import datetime
 
-# Set the title and favicon that appear in the Browser's tab bar.
-st.set_page_config(
-    page_title='GDP dashboard',
-    page_icon=':earth_americas:', # This is an emoji shortcode. Could be a URL too.
-)
+st.set_page_config(page_title="Agendas Clinica CAT", layout="wide")
+st.title("Agendas Clinica CAT")
+st.subheader("CAT Segurança e Saúde no Trabalho")
 
-# -----------------------------------------------------------------------------
-# Declare some useful functions.
+SUPABASE_URL = "https://SEU_PROJETO.supabase.co"
+SUPABASE_KEY = "SUA_ANON_KEY"
+ZAPI_INSTANCE = "SUA_INSTANCIA"
+ZAPI_TOKEN = "SEU_TOKEN"
 
-@st.cache_data
-def get_gdp_data():
-    """Grab GDP data from a CSV file.
+NUMEROS_ALERTA = ["5564999955603", "5564981318325", "5564999255538"]
+setores = ["TST - Segurança do Trabalho", "Fonoaudiologia", "Psicologia", "Recepção", "Técnico Enfermagem"]
+tipos = ["Visita técnica", "Treinamento", "Viagem", "Ausência", "Troca cobertura"]
 
-    This uses caching to avoid having to read the file every time. If we were
-    reading from an HTTP endpoint instead of a file, it's a good idea to set
-    a maximum age to the cache with the TTL argument: @st.cache_data(ttl='1d')
-    """
+col1, col2 = st.columns(2)
+with col1:
+    tipo = st.selectbox("Tipo", tipos)
+    prof_origem = st.text_input("Profissional Origem")
+    cliente = st.text_input("Cliente")
+    data = st.date_input("Data")
+with col2:
+    setor = st.selectbox("Setor", setores)
+    prof_sub = st.text_input("Profissional Substituto")
+    inicio = st.time_input("Inicio")
+    fim = st.time_input("Fim")
 
-    # Instead of a CSV on disk, you could read from an HTTP endpoint here too.
-    DATA_FILENAME = Path(__file__).parent/'data/gdp_data.csv'
-    raw_gdp_df = pd.read_csv(DATA_FILENAME)
+if st.button("SALVAR AGENDAMENTO", type="primary"):
+    payload = {
+        "tipo": tipo, "setor": setor,
+        "prof_origem": prof_origem, "prof_sub": prof_sub,
+        "cliente": cliente,
+        "data_inicio": f"{data}T{inicio}",
+        "data_fim": f"{data}T{fim}",
+        "status": "agendado"
+    }
+    r = requests.post(f"{SUPABASE_URL}/rest/v1/agenda", json=payload,
+        headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}", "Content-Type": "application/json"})
+    if r.status_code == 201:
+        st.success("Agendamento salvo!")
+    else:
+        st.error(r.text)
 
-    MIN_YEAR = 1960
-    MAX_YEAR = 2022
+st.divider()
+st.subheader("Agendamentos - Lista")
+try:
+    r = requests.get(f"{SUPABASE_URL}/rest/v1/agenda?order=data_inicio.desc&limit=50",
+                     headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"})
+    if r.status_code == 200:
+        st.dataframe(r.json(), use_container_width=True)
+except Exception as e:
+    st.info("Configure SUPABASE_URL e KEY para ver a lista")
 
-    # The data above has columns like:
-    # - Country Name
-    # - Country Code
-    # - [Stuff I don't care about]
-    # - GDP for 1960
-    # - GDP for 1961
-    # - GDP for 1962
-    # - ...
-    # - GDP for 2022
-    #
-    # ...but I want this instead:
-    # - Country Name
-    # - Country Code
-    # - Year
-    # - GDP
-    #
-    # So let's pivot all those year-columns into two: Year and GDP
-    gdp_df = raw_gdp_df.melt(
-        ['Country Code'],
-        [str(x) for x in range(MIN_YEAR, MAX_YEAR + 1)],
-        'Year',
-        'GDP',
-    )
-
-    # Convert years from string to integers
-    gdp_df['Year'] = pd.to_numeric(gdp_df['Year'])
-
-    return gdp_df
-
-gdp_df = get_gdp_data()
-
-# -----------------------------------------------------------------------------
-# Draw the actual page
-
-# Set the title that appears at the top of the page.
-'''
-# :earth_americas: GDP dashboard
-
-Browse GDP data from the [World Bank Open Data](https://data.worldbank.org/) website. As you'll
-notice, the data only goes to 2022 right now, and datapoints for certain years are often missing.
-But it's otherwise a great (and did I mention _free_?) source of data.
-'''
-
-# Add some spacing
-''
-''
-
-min_value = gdp_df['Year'].min()
-max_value = gdp_df['Year'].max()
-
-from_year, to_year = st.slider(
-    'Which years are you interested in?',
-    min_value=min_value,
-    max_value=max_value,
-    value=[min_value, max_value])
-
-countries = gdp_df['Country Code'].unique()
-
-if not len(countries):
-    st.warning("Select at least one country")
-
-selected_countries = st.multiselect(
-    'Which countries would you like to view?',
-    countries,
-    ['DEU', 'FRA', 'GBR', 'BRA', 'MEX', 'JPN'])
-
-''
-''
-''
-
-# Filter the data
-filtered_gdp_df = gdp_df[
-    (gdp_df['Country Code'].isin(selected_countries))
-    & (gdp_df['Year'] <= to_year)
-    & (from_year <= gdp_df['Year'])
-]
-
-st.header('GDP over time', divider='gray')
-
-''
-
-st.line_chart(
-    filtered_gdp_df,
-    x='Year',
-    y='GDP',
-    color='Country Code',
-)
-
-''
-''
-
-
-first_year = gdp_df[gdp_df['Year'] == from_year]
-last_year = gdp_df[gdp_df['Year'] == to_year]
-
-st.header(f'GDP in {to_year}', divider='gray')
-
-''
-
-cols = st.columns(4)
-
-for i, country in enumerate(selected_countries):
-    col = cols[i % len(cols)]
-
-    with col:
-        first_gdp = first_year[first_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-        last_gdp = last_year[last_year['Country Code'] == country]['GDP'].iat[0] / 1000000000
-
-        if math.isnan(first_gdp):
-            growth = 'n/a'
-            delta_color = 'off'
-        else:
-            growth = f'{last_gdp / first_gdp:,.2f}x'
-            delta_color = 'normal'
-
-        st.metric(
-            label=f'{country} GDP',
-            value=f'{last_gdp:,.0f}B',
-            delta=growth,
-            delta_color=delta_color
-        )
+if st.button("Verificar Atrasos e Enviar WhatsApp"):
+    agora = datetime.now().isoformat()
+    url = f"{SUPABASE_URL}/rest/v1/agenda?status=eq.agendado&data_fim=lt.{agora}"
+    r = requests.get(url, headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"})
+    for ag in r.json():
+        msg = f"⚠️ AGENDAS CLINICA CAT\nAtraso: {ag['tipo']} - {ag['prof_origem']} p/ {ag['cliente']}"
+        for num in NUMEROS_ALERTA:
+            requests.post(f"https://api.z-api.io/instances/{ZAPI_INSTANCE}/token/{ZAPI_TOKEN}/send-text",
+                          json={"phone": num, "message": msg})
+    st.success("Alertas enviados!")
