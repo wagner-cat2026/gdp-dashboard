@@ -67,9 +67,28 @@ def buscar_agendas():
     except Exception as e:
         st.error(f"Erro ao buscar: {e}")
         return pd.DataFrame()
-
-def salvar_agenda(dados):
+        def salvar_agenda(dados):
     try:
+        st.write("Tentando salvar:", dados)
+        dados_limpos = {k: str(v) for k, v in dados.items() if v is not None and v != ""}
+        res = supabase.table("agendamentos").insert(dados_limpos).execute()
+        st.success("Salvou com sucesso!")
+        return res
+    except Exception as e:
+        st.error(f"ERRO REAL DO BANCO: {e}")
+        st.json(dados)
+        raise
+    try:
+    # Mostra o que está tentando salvar
+    st.write("Tentando salvar:", dados)
+    dados_limpos = {k: str(v) for k,v in dados.items() if v is not None}
+    res = supabase.table("agendamentos").insert(dados_limpos).execute()
+    st.success("Salvou!")
+    return res
+except Exception as e:
+    st.error(f"ERRO REAL DO BANCO: {e}")
+    st.json(dados)
+    raise
     # Mostra o que está tentando salvar
     st.write("Tentando salvar:", dados)
     dados_limpos = {k: str(v) for k,v in dados.items() if v is not None}
