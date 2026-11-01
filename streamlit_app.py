@@ -1,4 +1,5 @@
 import streamlit as st
+USUARIOS = { ... } # código de login por setor
 USUARIOS = {"comercial@cat":{"senha":"cat123","setor":"Comercial"},"adm@cat":{"senha":"cat123","setor":"ADM"},"seguranca@cat":{"senha":"cat123","setor":"Segurança"},"clinica@cat":{"senha":"cat123","setor":"Clínica"},"rh@cat":{"senha":"cat123","setor":"RH"}}
 if "logado" not in st.session_state: st.session_state.logado=False
 if not st.session_state.logado:
