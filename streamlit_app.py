@@ -70,28 +70,28 @@ else:
             st.session_state.novo = True
         # --- FORMULÁRIO NOVO AGENDAMENTO ---
 if st.session_state.get("novo", False):
-with st.form("form_novo"):
-    st.subheader("+ Novo Agendamento")
-    col1, col2 = st.columns(2)
-    with col1:
-        nome = st.text_input("Nome do colaborador")
-        data = st.date_input("Data")
-    with col2:
-        horario = st.time_input("Horário")
-        setor_novo = st.selectbox("Setor", ["TST", "Fonoaudiologia", "Psicologia", "Recepção", "Técnico Enfermagem"])
-    obs = st.text_area("Observação")
-    c1, c2 = st.columns(2)
-    with c1:
-        salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
-    with c2:
-        cancelar = st.form_submit_button("Cancelar", use_container_width=True)
-    if salvar:
-        st.success(f"Agendamento salvo para {nome} em {data}!")
-        st.session_state.novo = False
-        st.rerun()
-    if cancelar:
-        st.session_state.novo = False
-        st.rerun()
+    with st.form("form_novo"):
+        st.subheader("+ Novo Agendamento")
+        col1, col2 = st.columns(2)
+        with col1:
+            nome = st.text_input("Nome do colaborador")
+            data = st.date_input("Data")
+        with col2:
+            horario = st.time_input("Horário")
+            setor_novo = st.selectbox("Setor", ["TST", "Fonoaudiologia", "Psicologia", "Recepção", "Técnico Enfermagem"])
+        obs = st.text_area("Observação")
+        c1, c2 = st.columns(2)
+        with c1:
+            salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
+        with c2:
+            cancelar = st.form_submit_button("Cancelar", use_container_width=True)
+        if salvar:
+            st.success(f"Agendamento salvo para {nome} em {data}!")
+            st.session_state.novo = False
+            st.rerun()
+        if cancelar:
+            st.session_state.novo = False
+            st.rerun()
 
 # --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
     # --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
