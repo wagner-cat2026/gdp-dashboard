@@ -64,10 +64,10 @@ else:
     # --- SIDEBAR SETORES ---
     with st.sidebar:
         st.markdown("#### SETORES")
-       setor = st.radio("Setor", ["TST", "Fonoaudiologia", "Psicologia", "Recepção", "Técnico Enfermagem"], label_visibility="collapsed")
-        st.markdown("---")
         setor = st.radio("Setor", ["TST", "Fonoaudiologia", "Psicologia", "Recepção", "Técnico Enfermagem"], label_visibility="collapsed")
-
+        st.markdown("---")
+        if st.button("+ Novo Agendamento", use_container_width=True):
+            st.session_state.novo = True
     # --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
     col_cal, col_alertas = st.columns([2.5, 1])
 
