@@ -1,4 +1,13 @@
 import streamlit as st
+
+st.write("TESTE BOTÃO")
+if st.button("TESTE CLIQUE AQUI"):
+    st.success("BOTÃO FUNCIONOU!")
+    st.session_state.teste = True
+
+if st.session_state.get("teste"):
+    st.write("Agora o formulário apareceria aqui")
+import streamlit as st
 from supabase import create_client
 import pandas as pd
 from datetime import datetime
