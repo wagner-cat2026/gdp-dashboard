@@ -78,7 +78,7 @@ if st.session_state.get("novo", False):
             data = st.date_input("Data")
         with col2:
             horario = st.time_input("Horário")
-            setor_novo = st.selectbox("Setor", ["TST", "Fonoaudiologia", "Psicologia", "Recepção", "Técnico Enfermagem"])
+            setor_novo = st.selectbox("Setor", ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras Saúde", "OUTROS"])
         obs = st.text_area("Observação")
         c1, c2 = st.columns(2)
         with c1:
