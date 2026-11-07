@@ -70,7 +70,7 @@ else:
             st.session_state.novo = True
         # --- FORMULÁRIO NOVO AGENDAMENTO ---
 if st.session_state.get("novo", False):
-        with st.form("novo_agendamento"):
+    with st.form("novo_agendamento"):
         nome = st.text_input("Nome do colaborador")
         data = st.date_input("Data")
         horario = st.time_input("Horário")
