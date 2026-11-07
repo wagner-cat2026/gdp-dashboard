@@ -2,7 +2,7 @@ import streamlit as st
 
 if "agendamentos" not in st.session_state:
     st.session_state.agendamentos = []
-    from supabase import create_client
+from supabase import create_client
 import pandas as pd
 from datetime import datetime
 
