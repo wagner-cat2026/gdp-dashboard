@@ -15,6 +15,7 @@ if "agendamentos" not in st.session_state:
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+SETORES = ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras Saúde", "OUTROS"]
 # --- ÍCONE OFICIAL CAT ---
 st.set_page_config(
     page_title="Agendas Clínica CAT",
@@ -81,7 +82,7 @@ if st.session_state.get("novo", False):
         nome = st.text_input("Nome do colaborador")
         data = st.date_input("Data")
         horario = st.time_input("Horário")
-        setor_novo = st.selectbox("Setor", ["Recepção", "Enfermagem", "Médico", "Outros"])
+        setor_novo = st.selectbox("Setor", ["Setor", SETORES)
         obs = st.text_area("Observação")
         salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
         cancelar = st.form_submit_button("Cancelar", use_container_width=True)
