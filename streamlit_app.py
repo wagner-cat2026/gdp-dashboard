@@ -80,12 +80,8 @@ if st.session_state.get("novo", False):
             horario = st.time_input("Horário")
             setor_novo = st.selectbox("Setor", ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras Saúde", "OUTROS"])
         obs = st.text_area("Observação")
-            c1, c2 = st.columns(2)
-        with c1:
-        salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
-    with c2:
-        cancelar = st.form_submit_button("Cancelar", use_container_width=True)
-    if salvar:
+              salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
+    cancelar = st.form_submit_button("Cancelar", use_container_width=True)   if salvar:
         st.session_state.agendamentos.append({
             "nome": nome,
             "data": str(data),
