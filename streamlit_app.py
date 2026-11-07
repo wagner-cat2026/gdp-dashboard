@@ -82,7 +82,7 @@ if st.session_state.get("novo", False):
         nome = st.text_input("Nome do colaborador")
         data = st.date_input("Data")
         horario = st.time_input("Horário")
-        setor_novo = st.selectbox("Setor", ["Setor", SETORES)
+        setor_novo = st.selectbox("Setor", SETORES)
         obs = st.text_area("Observação")
         salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
         cancelar = st.form_submit_button("Cancelar", use_container_width=True)
