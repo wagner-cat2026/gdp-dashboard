@@ -70,29 +70,28 @@ else:
             st.session_state.novo = True
         # --- FORMULÁRIO NOVO AGENDAMENTO ---
 if st.session_state.get("novo", False):
-    with st.form("form_novo"):
-        st.subheader("+ Novo Agendamento")
-        col1, col2 = st.columns(2)
-        with col1:
-            nome = st.text_input("Nome do colaborador")
-            data = st.date_input("Data")
-        with col2:
-            horario = st.time_input("Horário")
-            setor_novo = st.selectbox("Setor", ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras Saúde", "OUTROS"])
+        with st.form("novo_agendamento"):
+        nome = st.text_input("Nome do colaborador")
+        data = st.date_input("Data")
+        horario = st.time_input("Horário")
+        setor_novo = st.selectbox("Setor", ["Recepção", "Enfermagem", "Médico", "Outros"])
         obs = st.text_area("Observação")
-              salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
-    cancelar = st.form_submit_button("Cancelar", use_container_width=True)   if salvar:
-        st.session_state.agendamentos.append({
-            "nome": nome,
-            "data": str(data),
-            "horario": str(horario),
-            "setor": setor_novo,
-            "obs": obs
-        })
-        st.success(f"Agendamento salvo para {nome} em {data}!")
-        st.session_state.novo = False
-        st.rerun()
-    if cancelar:
+        salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
+        cancelar = st.form_submit_button("Cancelar", use_container_width=True)
+        if salvar:
+            st.session_state.agendamentos.append({
+                "nome": nome,
+                "data": str(data),
+                "horario": str(horario),
+                "setor": setor_novo,
+                "obs": obs
+            })
+            st.success(f"Agendamento salvo para {nome} em {data}!")
+            st.session_state.novo = False
+            st.rerun()
+        if cancelar:
+            st.session_state.novo = False
+            st.rerun()
             st.session_state.agendamentos.append({
                 "nome": nome,
                 "data": str(data),
