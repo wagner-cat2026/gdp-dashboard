@@ -85,11 +85,21 @@ if st.session_state.get("novo", False):
             salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
         with c2:
             cancelar = st.form_submit_button("Cancelar", use_container_width=True)
-        if salvar:
+            if salvar:
+        if nome.strip() == "":
+            st.error("Preencha o nome do colaborador!")
+        else:
+            st.session_state.agendamentos.append({
+                "nome": nome,
+                "data": str(data),
+                "horario": str(horario),
+                "setor": setor_novo,
+                "obs": obs
+            })
             st.success(f"Agendamento salvo para {nome} em {data}!")
             st.session_state.novo = False
             st.rerun()
-        if cancelar:
+            if cancelar:
             st.session_state.novo = False
             st.rerun()
 
