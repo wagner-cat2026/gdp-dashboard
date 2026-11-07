@@ -73,7 +73,7 @@ else:
     # --- SIDEBAR SETORES ---
     with st.sidebar:
         st.markdown("#### SETORES")
-        setor = st.radio("", ["TST", "Fonoaudiologia", "Psicologia", "Recepção", "Técnico Enfermagem"], index=0)
+        setor = st.radio("Setor", ["TST", "Fonoaudiologia", "Psicologia", "Recepção", "Técnico Enfermagem"], label_visibility="collapsed")
         st.markdown("---")
         if st.button("+ Novo Agendamento", use_container_width=True, type="primary"):
             st.session_state.novo = True
