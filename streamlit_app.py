@@ -3,6 +3,11 @@ from supabase import create_client
 import pandas as pd
 from datetime import datetime
 
+st.set_page_config(
+    page_title="Agenda CAT",
+    layout="wide"
+)
+
 if "agendamentos" not in st.session_state:
     st.session_state.agendamentos = []
 
@@ -10,7 +15,6 @@ if "agendamentos" not in st.session_state:
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
 # --- ÍCONE OFICIAL CAT ---
 st.set_page_config(
     page_title="Agendas Clínica CAT",
