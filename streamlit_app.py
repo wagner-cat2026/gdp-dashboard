@@ -1,12 +1,12 @@
 import streamlit as st
-
-if "agendamentos" not in st.session_state:
-    st.session_state.agendamentos = []
 from supabase import create_client
 import pandas as pd
 from datetime import datetime
 
-# --- CONFIG SUPABASE (mantém o seu que já funciona) ---
+if "agendamentos" not in st.session_state:
+    st.session_state.agendamentos = []
+
+# --- CONFIG SUPABASE ---
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
