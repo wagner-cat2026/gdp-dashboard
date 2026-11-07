@@ -86,8 +86,8 @@ if st.session_state.get("novo", False):
         with c2:
             cancelar = st.form_submit_button("Cancelar", use_container_width=True)
             if salvar:
-        if nome.strip() == "":
-            st.error("Preencha o nome do colaborador!")
+                if nome.strip() == "":
+                    st.error("Preencha o nome do colaborador!")
         else:
             st.session_state.agendamentos.append({
                 "nome": nome,
