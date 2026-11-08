@@ -72,9 +72,7 @@ else:
     </div>
     """, unsafe_allow_html=True)
 
-    # --- SIDEBAR SETORES ---
-    with st.sidebar:
-       # --- BOTÃO NOVO ---
+# --- SIDEBAR SETORES ---
 with st.sidebar:
     if st.button("+ Novo Agendamento", use_container_width=True):
         st.session_state.mostrar_form = True
