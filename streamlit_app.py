@@ -69,9 +69,9 @@ else:
     with st.sidebar:
         st.markdown("#### SETORES")
         setor = st.radio("Setor", ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras Saúde", "OUTROS"], key="setor")
-if st.button("+ Novo Agendamento", use_container_width=True, key="btn_novo"):
-    st.session_state.novo = True
-    st.rerun()
+        if st.button("+ Novo Agendamento", use_container_width=True, key="btn_novo"):
+            st.session_state.novo = True
+            st.rerun()
         # --- FORMULÁRIO NOVO AGENDAMENTO ---
 col_cal, col_alertas = st.columns([2.5, 1])
 cancelar = False
