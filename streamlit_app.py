@@ -85,16 +85,16 @@ if st.session_state.get("novo", False):
         salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
         cancelar = st.form_submit_button("Cancelar", use_container_width=True)
         if salvar:
-            st.session_state.agendamentos.append({
-                "nome": nome,
-                "data": str(data),
-                "horario": str(horario),
-                "setor": setor_novo,
-                "obs": obs
-            })
-            st.success(f"Agendamento salvo para {nome} em {data}!")
-            st.session_state.novo = False
-            st.rerun()
+    supabase.table("agendamentos").insert({
+        "nome": nome,
+        "data": str(data),
+        "horario": str(horario),
+        "setor": setor_novo,
+        "obs": obs
+    }).execute()
+    st.success(f"Agendamento salvo para {nome} em {data}!")
+    st.session_state.novo = False
+    st.rerun()
     if cancelar:
         st.session_state.novo = False
         st.rerun()
@@ -102,7 +102,10 @@ if st.session_state.get("novo", False):
 col_cal, col_alertas = st.columns([2.5, 1])
 
 setor = st.session_state.get("setor", "Todos")
-st.markdown(f"### Calendário Mensal • Novembro 2024 - {setor}")
+from datetime import date
+hoje = date.today()
+mes_nome = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][hoje.month - 1]
+st.markdown(f"### Calendário Mensal • {mes_nome} {hoje.year} - {setor}")
 # Aqui entra seu calendário que já funciona
 # Exemplo: buscar agendamentos do setor selecionado
 try:
