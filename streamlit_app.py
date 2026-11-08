@@ -100,9 +100,7 @@ if st.session_state.get("novo", False):
         st.session_state.novo = False
         st.rerun()
  # --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
-col_cal, col_alertas = st.columns([2.5, 1])
 
-setor = st.session_state.get("setor", "Todos")
 from datetime import date
 hoje = date.today()
 mes_nome = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][hoje.month - 1]
