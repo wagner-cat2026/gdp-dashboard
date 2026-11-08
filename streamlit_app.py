@@ -98,7 +98,7 @@ if st.session_state.get("novo", False):
             st.rerun()
 # --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
 col_cal, col_alertas = st.columns([2.5, 1])
-with col_cal:
+    setor = st.session_state.get("setor", "Todos")
     st.markdown(f"### Calendário Mensal • Novembro 2024 - {setor}")
     # Aqui entra seu calendário que já funciona
     # Exemplo: buscar agendamentos do setor selecionado
