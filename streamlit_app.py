@@ -2,6 +2,13 @@ import streamlit as st
 from supabase import create_client
 import pandas as pd
 from datetime import datetime
+
+st.set_page_config(
+    page_title="Agendas Clínica CAT",
+    layout="wide",
+    page_icon="CAT Agenda 512.png",
+    initial_sidebar_state="expanded"
+)
 if "agendamentos" not in st.session_state:
     st.session_state.agendamentos = []
 if "novo" not in st.session_state:
@@ -67,39 +74,38 @@ else:
 
     # --- SIDEBAR SETORES ---
     with st.sidebar:
-        st.markdown("#### SETORES")
-        setor = st.radio("Setor", ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras Saúde", "OUTROS"], key="setor")
-        if st.button("+ Novo Agendamento", use_container_width=True, key="btn_novo", type="primary"):
-            st.session_state.novo = True
-           
-# --- FORMULÁRIO NOVO AGENDAMENTO ---
-col_cal, col_alertas = st.columns([2.5, 1])
-cancelar = False
-salvar = False
-if st.session_state.get("novo", False):
-    with st.form("novo_agendamento"):
-        nome = st.text_input("Nome do colaborador")
-        data = st.date_input("Data")
-        horario = st.time_input("Horário")
-        setor_novo = st.selectbox("Setor", ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras NR35"])
-        obs = st.text_area("Observação")
-        salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
-        cancelar = st.form_submit_button("Cancelar", use_container_width=True)
-    if salvar:
-        supabase.table("agendamentos").insert({
-        "nome": nome,
-        "data": str(data),
-        "horario": str(horario),
-        "setor": setor_novo,
-        "obs": obs
-    }).execute()
-    st.success(f"Agendamento salvo para {nome} em {data}!")
-    st.session_state.novo = False
-    st.rerun()
-    if cancelar:
-        st.session_state.novo = False
-        st.rerun()
- # --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
+       # --- BOTÃO NOVO ---
+with st.sidebar:
+    if st.button("+ Novo Agendamento", use_container_width=True):
+        st.session_state.mostrar_form = True
+
+# --- DIALOG NO LUGAR DO FORM ---
+@st.dialog("Novo Agendamento")
+def form_novo():
+    setor_novo = st.selectbox("Setor", ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras NR35"])
+    nome = st.text_input("Nome")
+    data = st.date_input("Data")
+    obs = st.text_area("Observações")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Salvar", use_container_width=True, type="primary"):
+            supabase.table("agendamentos").insert({
+                "setor": setor_novo,
+                "nome": nome,
+                "data": str(data),
+                "obs": obs
+            }).execute()
+            st.success(f"Agendamento salvo para {nome} em {data}!")
+            st.session_state.mostrar_form = False
+            st.rerun()
+    with col2:
+        if st.button("Cancelar", use_container_width=True):
+            st.session_state.mostrar_form = False
+            st.rerun()
+
+if st.session_state.get("mostrar_form", False):
+    form_novo()
 
 from datetime import date
 hoje = date.today()
