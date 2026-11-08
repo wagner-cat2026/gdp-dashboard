@@ -50,6 +50,7 @@ if not st.session_state.logado:
         # aqui mantém sua lógica de login do Supabase
         st.session_state.logado = True
         st.rerun()
+    st.stop()
 else:
     # --- HEADER ---
     st.markdown("""
