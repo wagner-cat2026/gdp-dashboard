@@ -2,18 +2,10 @@ import streamlit as st
 from supabase import create_client
 import pandas as pd
 from datetime import datetime
-
-st.set_page_config(
-    page_title="Agenda CAT",
-    layout="wide"
-)
-
 if "agendamentos" not in st.session_state:
     st.session_state.agendamentos = []
-    
 if "novo" not in st.session_state:
     st.session_state.novo = False
-    
 # --- CONFIG SUPABASE ---
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
@@ -104,19 +96,17 @@ if st.session_state.get("novo", False):
             st.session_state.novo = False
             st.rerun()
 # --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
-setor = st.session_state.get("setor", "Todos")
 col_cal, col_alertas = st.columns([2.5, 1])
 with col_cal:
     st.markdown(f"### Calendário Mensal • Novembro 2024 - {setor}")
     # Aqui entra seu calendário que já funciona
     # Exemplo: buscar agendamentos do setor selecionado
-    try:
-        dados = supabase.table("agendamentos").select("*").eq("setor", setor).execute()
-        df = pd.DataFrame(dados.data)
-        st.dataframe(df, use_container_width=True)
-    except:
-        st.info(f"Mostrando agendamentos de {setor} - calendário mensal")
-
+try:
+    dados = supabase.table("agendamentos").select("*").eq("setor", setor).execute()
+    df = pd.DataFrame(dados.data)
+    st.dataframe(df, use_container_width=True)
+except:
+    st.info(f"Mostrando agendamentos de {setor} - calendário mensal")
     with col_alertas:
         st.markdown("#### 🔔 Painel de Alertas")
         st.warning("Exame Audiométrico - 3 colaboradores pendentes")
