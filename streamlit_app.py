@@ -5,7 +5,6 @@ from datetime import datetime
 if "agendamentos" not in st.session_state:
     st.session_state.agendamentos = []
 if "novo" not in st.session_state:
-   if "novo" not in st.session_state:
     st.session_state.novo = False
 # --- CONFIG SUPABASE ---
 SUPABASE_URL = st.secrets["SUPABASE_URL"]
