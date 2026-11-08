@@ -73,6 +73,8 @@ else:
             st.session_state.novo = True
         # --- FORMULÁRIO NOVO AGENDAMENTO ---
 col_cal, col_alertas = st.columns([2.5, 1])
+cancelar = False
+salvar = False
 if st.session_state.get("novo", False):
     with st.form("novo_agendamento"):
         nome = st.text_input("Nome do colaborador")
@@ -93,10 +95,10 @@ if st.session_state.get("novo", False):
             st.success(f"Agendamento salvo para {nome} em {data}!")
             st.session_state.novo = False
             st.rerun()
-if cancelar:
-    st.session_state.novo = False
-    st.rerun()
-# --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
+    if cancelar:
+        st.session_state.novo = False
+        st.rerun()
+ # --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
 col_cal, col_alertas = st.columns([2.5, 1])
 
 setor = st.session_state.get("setor", "Todos")
