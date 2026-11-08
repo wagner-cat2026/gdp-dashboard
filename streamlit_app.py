@@ -45,8 +45,10 @@ if "logado" not in st.session_state:
 if not st.session_state.logado:
     st.markdown("### Login Clínica CAT")
     email = st.text_input("Email")
+    ...
     senha = st.text_input("Senha", type="password")
     if st.button("Entrar"):
+        ...
         # aqui mantém sua lógica de login do Supabase
         st.session_state.logado = True
         st.rerun()
