@@ -84,8 +84,8 @@ if st.session_state.get("novo", False):
         obs = st.text_area("Observação")
         salvar = st.form_submit_button("Salvar Agendamento", use_container_width=True)
         cancelar = st.form_submit_button("Cancelar", use_container_width=True)
-        if salvar:
-    supabase.table("agendamentos").insert({
+    if salvar:
+        supabase.table("agendamentos").insert({
         "nome": nome,
         "data": str(data),
         "horario": str(horario),
