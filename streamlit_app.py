@@ -93,15 +93,16 @@ if st.session_state.get("novo", False):
             st.success(f"Agendamento salvo para {nome} em {data}!")
             st.session_state.novo = False
             st.rerun()
-        if cancelar:
-            st.session_state.novo = False
-            st.rerun()
+if cancelar:
+    st.session_state.novo = False
+    st.rerun()
 # --- CONTEÚDO PRINCIPAL NO LEIAUTE DA FOTO ---
 col_cal, col_alertas = st.columns([2.5, 1])
-    setor = st.session_state.get("setor", "Todos")
-    st.markdown(f"### Calendário Mensal • Novembro 2024 - {setor}")
-    # Aqui entra seu calendário que já funciona
-    # Exemplo: buscar agendamentos do setor selecionado
+
+setor = st.session_state.get("setor", "Todos")
+st.markdown(f"### Calendário Mensal • Novembro 2024 - {setor}")
+# Aqui entra seu calendário que já funciona
+# Exemplo: buscar agendamentos do setor selecionado
 try:
     dados = supabase.table("agendamentos").select("*").eq("setor", setor).execute()
     df = pd.DataFrame(dados.data)
