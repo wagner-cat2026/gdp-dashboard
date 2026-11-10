@@ -80,8 +80,8 @@ with col1:
             "obs": obs
         }).execute()
         st.success(f"Agendamento salvo para {nome} em {data}!")
-            st.session_state.mostrar_form = False
-            st.rerun()
+        st.session_state.mostrar_form = False
+        st.rerun()
     with col2:
         if st.button("Cancelar", use_container_width=True):
             st.session_state.mostrar_form = False
