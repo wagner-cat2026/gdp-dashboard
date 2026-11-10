@@ -104,6 +104,7 @@ def form_novo():
 
 if st.session_state.get("mostrar_form", False):
     form_novo()
+setor = st.session_state.get("setor", "Geral")
 
 from datetime import date
 hoje = date.today()
