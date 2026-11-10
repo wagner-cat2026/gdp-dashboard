@@ -85,10 +85,12 @@ if st.session_state.mostrar_form:
             try:
                 res = supabase.table("agendamentos").insert({
                     "tipo": tipo_novo,
+                    "setor": tipo_novo,
                     "cliente": cliente_novo,
                     "profissional": profissional_novo,
                     "data": str(data_novo),
-                    "obs": obs_novo
+                    "inicio": "08:00",
+                    "fim": "09:00"
                 }).execute()
                 st.success(f"Salvo! {cliente_novo} em {data_novo}")
                 st.session_state.mostrar_form = False
