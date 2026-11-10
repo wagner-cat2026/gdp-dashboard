@@ -47,14 +47,21 @@ st.markdown("""
 <div style="background:#0A1931; padding:18px 25px; border-radius:10px; color:white">
     <div style="font-weight:bold">CAT Segurança e Saúde no Trabalho</div>
     <div style="font-size:22px; font-weight:bold">Agendas Clínica CAT</div>
-</div>
-""", unsafe_allow_html=True)
-
 # --- MENU LATERAL ESQUERDO ---
 with st.sidebar:
+    st.markdown("### Setores")
+
     setor = st.radio(
         "",
-        st.markdown("### Setores")
+        SETORES,
+        label_visibility="collapsed"
+    )
+
+    st.write("---")
+
+    if st.button("+ Novo Agendamento", use_container_width=True, type="primary"):
+        st.session_state.mostrar_form = True
+        st.rerun()
         SETORES,
         label_visibility="collapsed"
     )
