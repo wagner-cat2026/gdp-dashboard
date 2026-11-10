@@ -71,33 +71,34 @@ if st.session_state.mostrar_form:
     st.markdown("### Novo Agendamento")
     col1, col2 = st.columns(2)
     with col1:
-        setor_novo = st.selectbox("Setor do agendamento", SETORES, index=SETORES.index(setor))
-        nome = st.text_input("Nome / Empresa")
+        tipo_novo = st.selectbox("Setor do agendamento", SETORES, index=SETORES.index(setor))
+        cliente_novo = st.text_input("Nome / Empresa / Cliente")
     with col2:
-        data = st.date_input("Data", value=date.today())
-        obs = st.text_area("Observação")
+        profissional_novo = st.text_input("Profissional")
+        data_novo = st.date_input("Data", value=date.today())
+
+    obs_novo = st.text_area("Observação")
 
     c1, c2 = st.columns(2)
     with c1:
         if st.button("Salvar", use_container_width=True, type="primary"):
             try:
                 res = supabase.table("agendamentos").insert({
-                    "setor": setor_novo,
-                    "nome": nome,
-                    "data": str(data),
-                    "obs": obs
+                    "tipo": tipo_novo,
+                    "cliente": cliente_novo,
+                    "profissional": profissional_novo,
+                    "data": str(data_novo),
+                    "obs": obs_novo
                 }).execute()
-                st.success(f"Agendamento salvo para {nome} em {data}!")
+                st.success(f"Salvo! {cliente_novo} em {data_novo}")
                 st.session_state.mostrar_form = False
                 st.rerun()
             except Exception as e:
                 st.error(f"Erro ao salvar: {e}")
-                st.write("DADOS QUE TENTOU SALVAR:", setor_novo, nome, str(data), obs)
     with c2:
         if st.button("Cancelar", use_container_width=True):
             st.session_state.mostrar_form = False
             st.rerun()
-
 # --- CALENDÁRIO ---
 hoje = date.today()
 mes_nome = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][hoje.month - 1]
@@ -105,7 +106,7 @@ st.markdown(f"### Calendário Mensal • {mes_nome} {hoje.year} - {setor}")
 
 # --- LISTA ---
 try:
-    dados = supabase.table("agendamentos").select("*").eq("setor", setor).execute()
+    dados = supabase.table("agendamentos").select("*").eq("tipo", setor).execute()
     df = pd.DataFrame(dados.data)
     if len(df) > 0:
         st.dataframe(df, use_container_width=True)
