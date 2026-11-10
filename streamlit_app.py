@@ -22,7 +22,7 @@ SUPABASE_URL = st.secrets["SUPABASE_URL"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-SETORES = ["Geral", "Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras Saúde", "OUTROS"]
+SETORES = ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras Saúde", "OUTROS"]
 
 # --- ESTILO ---
 st.markdown("""
@@ -53,16 +53,23 @@ st.markdown("""
 # --- MENU LATERAL ESQUERDO ---
 with st.sidebar:
     st.markdown("### 📂 Agendas Clínica CAT")
-    st.write("")
-
+    
     setor = st.radio(
         "Selecione o Setor:",
-        SETORES
+        ["Ver Todos"] + SETORES
     )
 
     st.write("---")
+    st.markdown("### ⚡ Filtros rápidos")
 
-    if st.button("+ Novo Agendamento", key="btn_novo_sidebar", use_container_width=True, type="primary"):
+    filtro_rapido = st.radio(
+        "Filtrar por:",
+        ["Todos", "Hoje", "Amanhã", "Esta semana", "Pendentes"],
+        key="filtro_rapido"
+    )
+
+    st.write("---")
+    if st.button("+ Novo Agendamento", use_container_width=True, type="primary"):
         st.session_state.mostrar_form = True
         st.rerun()
 
@@ -116,7 +123,10 @@ st.markdown(f"### Calendário Mensal • {mes_nome} {hoje.year} - {setor}")
 
 # --- LISTA ---
 try:
-    dados = supabase.table("agendamentos").select("*").eq("setor", setor).execute()
+    query = supabase.table("agendamentos").select("*")
+if setor != "Ver Todos":
+    query = query.eq("setor", setor)
+dados = query.execute()
     df = pd.DataFrame(dados.data)
     if len(df) > 0:
         st.dataframe(df, use_container_width=True)
