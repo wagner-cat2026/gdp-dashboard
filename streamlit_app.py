@@ -73,9 +73,7 @@ else:
     """, unsafe_allow_html=True)
 
 # --- SIDEBAR SETORES ---
-with st.sidebar:
-    if st.button("+ Novo Agendamento", use_container_width=True):
-        st.session_state.mostrar_form = True
+if st.button("+ Novo Agendamento", key="btn_novo_sidebar", use_container_width=True):
 
 # --- DIALOG NO LUGAR DO FORM ---
 @st.dialog("Novo Agendamento")
