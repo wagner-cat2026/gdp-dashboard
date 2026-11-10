@@ -54,6 +54,7 @@ st.markdown("""
 with st.sidebar:
     setor = st.radio(
         "",
+        st.markdown("### Setores")
         SETORES,
         label_visibility="collapsed"
     )
