@@ -67,24 +67,19 @@ else:
             <div style="color:white">
                 <div style="font-weight:bold">CAT Segurança e Saúde no Trabalho</div>
                 <div style="font-size:22px; font-weight:bold">Agendas Clínica CAT</div>
-  @st.dialog("Novo Agendamento")
-def form_novo():
-    st.write("aqui vai o formulário")
-    # ... resto do form
-
-# lá embaixo, onde chama o form:
-if st.session_state.get("mostrar_form"):
-    form_novo()
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Salvar", use_container_width=True, type="primary"):
-            supabase.table("agendamentos").insert({
-                "setor": setor_novo,
-                "nome": nome,
-                "data": str(data),
-                "obs": obs
-            }).execute()
-            st.success(f"Agendamento salvo para {nome} em {data}!")
+      </div>
+</div>
+""", unsafe_allow_html=True)
+col1, col2 = st.columns(2)
+with col1:
+    if st.button("Salvar", use_container_width=True, type="primary"):
+        supabase.table("agendamentos").insert({
+            "setor": setor_novo,
+            "nome": nome,
+            "data": str(data),
+            "obs": obs
+        }).execute()
+        st.success(f"Agendamento salvo para {nome} em {data}!")
             st.session_state.mostrar_form = False
             st.rerun()
     with col2:
