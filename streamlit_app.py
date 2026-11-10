@@ -50,12 +50,23 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# --- SIDEBAR ---
+# --- MENU PRINCIPAL NO TOPO (sempre visível) ---
+col_menu1, col_menu2 = st.columns([3, 1])
+with col_menu1:
+    setor = st.selectbox("📂 Setor", SETORES)
+with col_menu2:
+    st.write("")  # espaço pra alinhar
+    if st.button("+ Novo Agendamento", key="btn_novo_topo", use_container_width=True, type="primary"):
+        st.session_state.mostrar_form = True
+        st.rerun()
+
+# --- SIDEBAR SÓ COMO APOIO ---
 with st.sidebar:
     st.write("Agendas Clínica CAT")
-    setor = st.selectbox("Setor", SETORES)
-    if st.button("+ Novo Agendamento", key="btn_novo_sidebar", use_container_width=True):
-        st.session_state.mostrar_form = True
+    st.info(f"Setor atual: {setor}")
+    st.write("Filtros rápidos")
+    if st.button("Ver Todos", use_container_width=True):
+        st.session_state.mostrar_form = False
         st.rerun()
 
 # --- FORMULÁRIO ---
