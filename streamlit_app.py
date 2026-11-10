@@ -81,17 +81,18 @@ if st.session_state.mostrar_form:
     with c1:
         if st.button("Salvar", use_container_width=True, type="primary"):
             try:
-                supabase.table("agendamentos").insert({
+                res = supabase.table("agendamentos").insert({
                     "setor": setor_novo,
                     "nome": nome,
                     "data": str(data),
                     "obs": obs
                 }).execute()
                 st.success(f"Agendamento salvo para {nome} em {data}!")
+                st.session_state.mostrar_form = False
+                st.rerun()
             except Exception as e:
                 st.error(f"Erro ao salvar: {e}")
-            st.session_state.mostrar_form = False
-            st.rerun()
+                st.write("DADOS QUE TENTOU SALVAR:", setor_novo, nome, str(data), obs)
     with c2:
         if st.button("Cancelar", use_container_width=True):
             st.session_state.mostrar_form = False
