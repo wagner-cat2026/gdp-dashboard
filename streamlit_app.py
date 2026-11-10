@@ -91,7 +91,9 @@ with st.sidebar:
     if st.button("+ Novo Agendamento", key="btn_novo_sidebar", use_container_width=True):
         st.session_state.mostrar_form = True
         st.rerun()
-mes_nome = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][hoje.month - 1]
+from datetime import date
+hoje = date.today()
+mes_nome = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"][hoje.month - 1]
 st.markdown(f"### Calendário Mensal • {mes_nome} {hoje.year} - {setor}")
 # Aqui entra seu calendário que já funciona
 # Exemplo: buscar agendamentos do setor selecionado
