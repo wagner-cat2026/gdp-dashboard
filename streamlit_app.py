@@ -104,7 +104,12 @@ def form_novo():
 
 if st.session_state.get("mostrar_form", False):
     form_novo()
-setor = st.session_state.get("setor", "Geral")
+with st.sidebar:
+    st.write("Agendas Clínica CAT")
+    setor = st.selectbox("Setor", ["Geral","Comercial","ADM","Segurança","Clínica","RH","Agenda de Viagens"])
+    if st.button("+ Novo Agendamento", use_container_width=True):
+        st.session_state.mostrar_form = True
+        st.rerun()
 
 from datetime import date
 hoje = date.today()
