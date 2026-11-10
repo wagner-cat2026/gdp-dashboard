@@ -50,15 +50,24 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# --- MENU PRINCIPAL NO TOPO (sempre visível) ---
-col_menu1, col_menu2 = st.columns([3, 1])
-with col_menu1:
-    setor = st.selectbox("📂 Setor", SETORES)
-with col_menu2:
-    st.write("")  # espaço pra alinhar
-    if st.button("+ Novo Agendamento", key="btn_novo_topo", use_container_width=True, type="primary"):
+# --- MENU LATERAL ESQUERDO ---
+with st.sidebar:
+    st.markdown("### 📂 Agendas Clínica CAT")
+    st.write("")
+
+    setor = st.radio(
+        "Selecione o Setor:",
+        SETORES
+    )
+
+    st.write("---")
+
+    if st.button("+ Novo Agendamento", key="btn_novo_sidebar", use_container_width=True, type="primary"):
         st.session_state.mostrar_form = True
         st.rerun()
+
+    st.write("---")
+    st.caption(f"Setor atual: {setor}")
 
 # --- SIDEBAR SÓ COMO APOIO ---
 with st.sidebar:
