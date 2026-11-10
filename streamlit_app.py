@@ -52,29 +52,17 @@ st.markdown("""
 
 # --- MENU LATERAL ESQUERDO ---
 with st.sidebar:
-    st.markdown("### 📂 Agendas Clínica CAT")
-    
     setor = st.radio(
-        "Selecione o Setor:",
-        ["Ver Todos"] + SETORES
+        "",
+        SETORES,
+        label_visibility="collapsed"
     )
 
     st.write("---")
-    st.markdown("### ⚡ Filtros rápidos")
 
-    filtro_rapido = st.radio(
-        "Filtrar por:",
-        ["Todos", "Hoje", "Amanhã", "Esta semana", "Pendentes"],
-        key="filtro_rapido"
-    )
-
-    st.write("---")
     if st.button("+ Novo Agendamento", use_container_width=True, type="primary"):
         st.session_state.mostrar_form = True
         st.rerun()
-
-    st.write("---")
-    st.caption(f"Setor atual: {setor}")
 
 # --- SIDEBAR SÓ COMO APOIO ---
 with st.sidebar:
@@ -123,10 +111,7 @@ st.markdown(f"### Calendário Mensal • {mes_nome} {hoje.year} - {setor}")
 
 # --- LISTA ---
 try:
-    query = supabase.table("agendamentos").select("*")
-    if setor != "Ver Todos":
-        query = query.eq("setor", setor)
-    dados = query.execute()
+    dados = supabase.table("agendamentos").select("*").eq("setor", setor).execute()
     df = pd.DataFrame(dados.data)
     if len(df) > 0:
         st.dataframe(df, use_container_width=True)
