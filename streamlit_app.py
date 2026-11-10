@@ -85,19 +85,12 @@ with col1:
     with col2:
         if st.button("Cancelar", use_container_width=True):
             st.session_state.mostrar_form = False
-            st.rerun()
-
-if st.session_state.get("mostrar_form", False):
-    form_novo()
 with st.sidebar:
     st.write("Agendas Clínica CAT")
-    setor = st.selectbox("Setor", ["Geral","Comercial","ADM","Segurança","Clínica","RH","Agenda de Viagens"])
-   if st.button("+ Novo Agendamento", key="btn_novo_sidebar", use_container_width=True):
+    setor = st.selectbox("Setor", ["Geral", "Comercial", "ADM", "Segurança", "Clínica", "RH", "Agenda de Viagens"])
+    if st.button("+ Novo Agendamento", key="btn_novo_sidebar", use_container_width=True):
         st.session_state.mostrar_form = True
         st.rerun()
-
-from datetime import date
-hoje = date.today()
 mes_nome = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"][hoje.month - 1]
 st.markdown(f"### Calendário Mensal • {mes_nome} {hoje.year} - {setor}")
 # Aqui entra seu calendário que já funciona
