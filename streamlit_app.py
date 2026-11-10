@@ -67,22 +67,14 @@ else:
             <div style="color:white">
                 <div style="font-weight:bold">CAT Segurança e Saúde no Trabalho</div>
                 <div style="font-size:22px; font-weight:bold">Agendas Clínica CAT</div>
-            </div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- SIDEBAR SETORES ---
-if st.button("+ Novo Agendamento", key="btn_novo_sidebar", use_container_width=True):
-
-# --- DIALOG NO LUGAR DO FORM ---
-@st.dialog("Novo Agendamento")
+  @st.dialog("Novo Agendamento")
 def form_novo():
-    setor_novo = st.selectbox("Setor", ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Palestras NR1", "Palestras NR35"])
-    nome = st.text_input("Nome")
-    data = st.date_input("Data")
-    obs = st.text_area("Observações")
+    st.write("aqui vai o formulário")
+    # ... resto do form
 
+# lá embaixo, onde chama o form:
+if st.session_state.get("mostrar_form"):
+    form_novo()
     col1, col2 = st.columns(2)
     with col1:
         if st.button("Salvar", use_container_width=True, type="primary"):
