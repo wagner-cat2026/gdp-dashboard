@@ -73,11 +73,11 @@ if st.session_state.mostrar_form:
     with col1:
         tipo_novo = st.selectbox("Setor do agendamento", SETORES, index=SETORES.index(setor))
         cliente_novo = st.text_input("Nome / Empresa / Cliente")
-    with col2:
         profissional_novo = st.text_input("Profissional")
+    with col2:
         data_novo = st.date_input("Data", value=date.today())
-
-    obs_novo = st.text_area("Observação")
+        inicio_novo = st.time_input("Hora Início", value=time(8, 0))
+        fim_novo = st.time_input("Hora Fim", value=time(9, 0))
 
     c1, c2 = st.columns(2)
     with c1:
@@ -89,10 +89,10 @@ if st.session_state.mostrar_form:
                     "cliente": cliente_novo,
                     "profissional": profissional_novo,
                     "data": str(data_novo),
-                    "inicio": "08:00",
-                    "fim": "09:00"
+                    "inicio": str(inicio_novo),
+                    "fim": str(fim_novo)
                 }).execute()
-                st.success(f"Salvo! {cliente_novo} em {data_novo}")
+                st.success(f"Salvo! {cliente_novo} em {data_novo} das {inicio_novo} às {fim_novo}")
                 st.session_state.mostrar_form = False
                 st.rerun()
             except Exception as e:
