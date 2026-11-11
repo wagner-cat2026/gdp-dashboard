@@ -108,15 +108,17 @@ st.markdown(f"### Calendário Mensal • {mes_nome} {hoje.year} - {setor}")
 
 # --- LISTA ---
 try:
-    dados = supabase.table("agendamentos").select("tipo, cliente, profissional, data, inicio, fim").eq("tipo", setor).execute()
+    dados = supabase.table("agendamentos").select("setor, data, inicio, fim, cliente, profissional").eq("setor", setor).execute()
     df = pd.DataFrame(dados.data)
     if len(df) > 0:
-        st.dataframe(df, use_container_width=True)
+        df = df[["setor", "data", "inicio", "fim", "cliente", "profissional"]]
+        df.columns = ["Setor", "Data", "Início", "Fim", "Cliente", "Profissional"]
+        st.dataframe(df, use_container_width=True, hide_index=True)
     else:
         st.info(f"Nenhum agendamento em {setor} ainda.")
 except Exception as e:
     st.info(f"Mostrando agendamentos de {setor} - calendário mensal")
-
+    
 # --- ALERTAS + RESUMO ---
 st.markdown("#### 🔔 Painel de Alertas")
 st.warning("Exame Audiométrico - 3 colaboradores pendentes")
