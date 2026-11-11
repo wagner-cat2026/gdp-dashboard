@@ -108,7 +108,7 @@ st.markdown(f"### Calendário Mensal • {mes_nome} {hoje.year} - {setor}")
 
 # --- LISTA ---
 try:
-    dados = supabase.table("agendamentos").select("*").eq("tipo", setor).execute()
+    dados = supabase.table("agendamentos").select("tipo, cliente, profissional, data, inicio, fim").eq("tipo", setor).execute()
     df = pd.DataFrame(dados.data)
     if len(df) > 0:
         st.dataframe(df, use_container_width=True)
