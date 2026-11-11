@@ -125,27 +125,57 @@ except Exception as e:
 # --- ALERTAS + RESUMO ---
 st.markdown("### 🔔 Painel de Alertas")
 
-# Todas as agendadas, sem filtro de data
-agendados = df.sort_values(['Data', 'Início'])
+# Garante coluna de Status mesmo sem ter no banco ainda
+if 'Status' not in df.columns:
+    df['Status'] = 'Pendente'
+if 'Motivo' not in df.columns:
+    df['Motivo'] = ''
 
-if len(agendados) == 0:
-    st.success("Nenhuma tarefa agendada.")
-else:
-    for _, ag in agendados.iterrows():
-        st.warning(f"📅 {ag['Data']} {ag['Início']}-{ag['Fim']} - {ag['Setor']} - {ag['Cliente']} - {ag['Profissional']}")
+hoje = pd.to_datetime('today').normalize()
+
+for idx, ag in df.iterrows():
+    data_ag = pd.to_datetime(ag['Data'])
+    
+    # Regra do Pendente automático
+    status_atual = ag['Status']
+    if status_atual not in ['Concluído', 'Cancelado'] and data_ag < hoje:
+        status_atual = 'Pendente - Atrasado'
+    elif status_atual not in ['Concluído', 'Cancelado']:
+        status_atual = 'Pendente'
+
+    cor = "🟢" if status_atual == 'Concluído' else "🔴" if status_atual == 'Cancelado' else "🟡"
+    st.write(f"{cor} **{ag['Data']} {ag['Início']}-{ag['Fim']}** - {ag['Setor']} - {ag['Cliente']} - {ag['Profissional']} - **{status_atual}**")
+
+    if status_atual == 'Cancelado' and ag['Motivo']:
+        st.caption(f"Motivo: {ag['Motivo']}")
+
+    col1, col2, col3 = st.columns([1, 1, 2])
+    with col1:
+        if st.button("✅ Concluído", key=f"conc_{idx}"):
+            # Salva no Supabase - troca o nome da tabela se for diferente
+            # supabase.table("agendamentos").update({"Status": "Concluído"}).eq("id", ag['id']).execute()
+            st.session_state[f"status_{idx}"] = "Concluído"
+            st.rerun()
+    with col2:
+        if st.button("❌ Cancelado", key=f"canc_{idx}"):
+            st.session_state[f"mostrar_motivo_{idx}"] = True
+    with col3:
+        if st.session_state.get(f"mostrar_motivo_{idx}", False):
+            motivo = st.text_input("Motivo do cancelamento:", key=f"motivo_{idx}")
+            if st.button("Salvar cancelamento", key=f"salvar_{idx}"):
+                # supabase.table("agendamentos").update({"Status": "Cancelado", "Motivo": motivo}).eq("id", ag['id']).execute()
+                st.session_state[f"status_{idx}"] = "Cancelado"
+                st.rerun()
+
+    st.divider()
 
 st.markdown("### 📊 Resumo do Dia")
-
 c1, c2 = st.columns(2)
 total = len(df)
-
-# Tenta achar confirmado na Observação, se não tiver, tudo fica pendente
-if 'Observação' in df.columns:
-    confirmados = len(df[df['Observação'].astype(str).str.lower().str.contains('confirm', na=False)])
-else:
-    confirmados = 0
-
-pendentes = total - confirmados
+# Usa o status salvo na sessão se tiver
+confirmados = sum(1 for i in df.index if st.session_state.get(f"status_{i}") == "Concluído")
+cancelados = sum(1 for i in df.index if st.session_state.get(f"status_{i}") == "Cancelado")
+pendentes = total - confirmados - cancelados
 taxa = int(confirmados / total * 100) if total > 0 else 0
 
 c1.metric("Agendamentos", total)
