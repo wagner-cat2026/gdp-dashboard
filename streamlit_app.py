@@ -90,7 +90,8 @@ if st.session_state.mostrar_form:
                     "cliente": cliente_novo,
                     "profissional": profissional_novo,
                     "data": str(data_novo),
-                    "inicio": str(inicio_novo),
+                    "inicio": inicio_novo.strftime("%H:%M"),
+                    "fim": fim_novo.strftime("%H:%M"),
                     "fim": str(fim_novo),
                     "obs": obs_novo
                 }).execute()
