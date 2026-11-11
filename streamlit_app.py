@@ -139,7 +139,16 @@ st.markdown("### 📊 Resumo do Dia")
 c1, c2 = st.columns(2)
 total = len(df)
 
+# Tenta achar confirmado na Observação, se não tiver, tudo fica pendente
+if 'Observação' in df.columns:
+    confirmados = len(df[df['Observação'].astype(str).str.lower().str.contains('confirm', na=False)])
+else:
+    confirmados = 0
+
+pendentes = total - confirmados
+taxa = int(confirmados / total * 100) if total > 0 else 0
+
 c1.metric("Agendamentos", total)
-c2.metric("Setores", df['Setor'].nunique() if total > 0 else 0)
-c1.metric("Clientes", df['Cliente'].nunique() if total > 0 else 0)
-c2.metric("Profissionais", df['Profissional'].nunique() if total > 0 else 0)
+c2.metric("Confirmados", confirmados)
+c1.metric("Pendentes", pendentes)
+c2.metric("Taxa", f"{taxa}%")
