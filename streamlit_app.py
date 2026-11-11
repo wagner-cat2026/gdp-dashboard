@@ -153,29 +153,32 @@ for idx, ag in df.iterrows():
     with col1:
         if st.button("✅ Concluído", key=f"conc_{idx}"):
             # Salva no Supabase - troca o nome da tabela se for diferente
-            # supabase.table("agendamentos").update({"Status": "Concluído"}).eq("id", ag['id']).execute()
-            st.session_state[f"status_{idx}"] = "Concluído"
+            supabase.table("agendamentos_geral").update({"status": "Concluido"}).eq("id", ag['id']).execute()
             st.rerun()
     with col2:
         if st.button("❌ Cancelado", key=f"canc_{idx}"):
             st.session_state[f"mostrar_motivo_{idx}"] = True
-    with col3:
-        if st.session_state.get(f"mostrar_motivo_{idx}", False):
-            motivo = st.text_input("Motivo do cancelamento:", key=f"motivo_{idx}")
-            if st.button("Salvar cancelamento", key=f"salvar_{idx}"):
-                # supabase.table("agendamentos").update({"Status": "Cancelado", "Motivo": motivo}).eq("id", ag['id']).execute()
-                st.session_state[f"status_{idx}"] = "Cancelado"
+   with col3:
+    if st.session_state.get(f"mostrar_motivo_{idx}", False):
+        motivo = st.text_input("Motivo do cancelamento:", key=f"motivo_{idx}")
+        if st.button("Salvar cancelamento", key=f"salvar_{idx}"):
+            if motivo.strip() == "":
+                st.warning("Escreva o motivo antes de salvar.")
+            else:
+                # ESSA LINHA AGORA VAI SALVAR DE VERDADE - sem # na frente
+                supabase.table("agendamentos_geral").update({"status": "Cancelado", "motivo": motivo}).eq("id", ag['id']).execute()
                 st.rerun()
 
-    st.divider()
+st.divider()
 
 st.markdown("### 📊 Resumo do Dia")
 c1, c2 = st.columns(2)
 total = len(df)
-# Usa o status salvo na sessão se tiver
-confirmados = sum(1 for i in df.index if st.session_state.get(f"status_{i}") == "Concluído")
-cancelados = sum(1 for i in df.index if st.session_state.get(f"status_{i}") == "Cancelado")
+# Agora conta direto do banco, não da sessão
+confirmados = len(df[df['status'].astype(str) == 'Concluído'])
+cancelados = len(df[df['status'].astype(str) == 'Cancelado'])
 pendentes = total - confirmados - cancelados
+taxa = int(confirmados / total * 100) if total > 0 else 0
 taxa = int(confirmados / total * 100) if total > 0 else 0
 
 c1.metric("Agendamentos", total)
