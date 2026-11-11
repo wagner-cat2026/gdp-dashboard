@@ -123,14 +123,26 @@ except Exception as e:
     st.info(f"Mostrando agendamentos de {setor} - calendário mensal")
     
 # --- ALERTAS + RESUMO ---
-st.markdown("#### 🔔 Painel de Alertas")
-st.warning("Exame Audiométrico - 3 colaboradores pendentes")
-st.warning("ASO vencendo - 2 colaboradores")
-st.info("Treinamento NR-35 - Amanhã às 09:00")
+st.markdown("### 🔔 Painel de Alertas")
 
-st.markdown("#### 📊 Resumo do Dia")
+# Todas as agendadas, sem filtro de data
+agendados = df[df['status'] == 'agendado'].sort_values('data_inicio')
+
+if len(agendados) == 0:
+    st.success("Nenhuma tarefa agendada.")
+else:
+    for _, ag in agendados.iterrows():
+        st.warning(f"📅 {ag['data_inicio']} - {ag['tipo']} - {ag['cliente']} - {ag['prof_origem']}")
+
+st.markdown("### 📊 Resumo do Dia")
+
 c1, c2 = st.columns(2)
-c1.metric("Agendamentos", "14")
-c2.metric("Confirmados", "9")
-c1.metric("Pendentes", "5")
-c2.metric("Taxa", "85%")
+total = len(df)
+confirmados = len(df[df['status'] == 'confirmado'])
+pendentes = len(df[df['status'] == 'agendado'])
+taxa = int(confirmados / total * 100) if total > 0 else 0
+
+c1.metric("Agendamentos", total)
+c2.metric("Confirmados", confirmados)
+c1.metric("Pendentes", pendentes)
+c2.metric("Taxa", f"{taxa}%")
