@@ -126,6 +126,8 @@ except Exception as e:
 st.markdown("### 🔔 Painel de Alertas")
 
 # Todas as agendadas, sem filtro de data
+st.write(df.columns.tolist())
+st.write(df.head(2))
 agendados = df[df['status'] == 'agendado'].sort_values('data_inicio')
 
 if len(agendados) == 0:
