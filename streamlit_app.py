@@ -108,11 +108,12 @@ st.markdown(f"### Calendário Mensal • {mes_nome} {hoje.year} - {setor}")
 
 # --- LISTA ---
 try:
-    dados = supabase.table("agendamentos").select("setor, data, inicio, fim, cliente, profissional").eq("setor", setor).execute()
+    dados = supabase.table("agendamentos").select("setor, data, inicio, fim, cliente, profissional, obs").eq("setor", setor).execute()
     df = pd.DataFrame(dados.data)
     if len(df) > 0:
-        df = df[["setor", "data", "inicio", "fim", "cliente", "profissional"]]
-        df.columns = ["Setor", "Data", "Início", "Fim", "Cliente", "Profissional"]
+        df = df[["setor", "data", "inicio", "fim", "cliente", "profissional", "obs"]]
+        df.columns = ["Setor", "Data", "Início", "Fim", "Cliente", "Profissional", "Observação"]
+        df = df.fillna("")
         st.dataframe(df, use_container_width=True, hide_index=True)
     else:
         st.info(f"Nenhum agendamento em {setor} ainda.")
