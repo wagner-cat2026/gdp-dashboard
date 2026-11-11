@@ -126,25 +126,20 @@ except Exception as e:
 st.markdown("### 🔔 Painel de Alertas")
 
 # Todas as agendadas, sem filtro de data
-st.write(df.columns.tolist())
-st.write(df.head(2))
-agendados = df[df['status'] == 'agendado'].sort_values('data_inicio')
+agendados = df.sort_values(['Data', 'Início'])
 
 if len(agendados) == 0:
     st.success("Nenhuma tarefa agendada.")
 else:
     for _, ag in agendados.iterrows():
-        st.warning(f"📅 {ag['data_inicio']} - {ag['tipo']} - {ag['cliente']} - {ag['prof_origem']}")
+        st.warning(f"📅 {ag['Data']} {ag['Início']}-{ag['Fim']} - {ag['Setor']} - {ag['Cliente']} - {ag['Profissional']}")
 
 st.markdown("### 📊 Resumo do Dia")
 
 c1, c2 = st.columns(2)
 total = len(df)
-confirmados = len(df[df['status'] == 'confirmado'])
-pendentes = len(df[df['status'] == 'agendado'])
-taxa = int(confirmados / total * 100) if total > 0 else 0
 
 c1.metric("Agendamentos", total)
-c2.metric("Confirmados", confirmados)
-c1.metric("Pendentes", pendentes)
-c2.metric("Taxa", f"{taxa}%")
+c2.metric("Setores", df['Setor'].nunique() if total > 0 else 0)
+c1.metric("Clientes", df['Cliente'].nunique() if total > 0 else 0)
+c2.metric("Profissionais", df['Profissional'].nunique() if total > 0 else 0)
