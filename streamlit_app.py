@@ -92,7 +92,6 @@ if st.session_state.mostrar_form:
                     "data": str(data_novo),
                     "inicio": inicio_novo.strftime("%H:%M"),
                     "fim": fim_novo.strftime("%H:%M"),
-                    "fim": str(fim_novo),
                     "obs": obs_novo
                 }).execute()
                 st.success(f"Salvo! {cliente_novo} em {data_novo} das {inicio_novo} às {fim_novo}")
