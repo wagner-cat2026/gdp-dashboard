@@ -78,6 +78,7 @@ if st.session_state.mostrar_form:
         data_novo = st.date_input("Data", value=date.today())
         inicio_novo = st.time_input("Hora Início", value=time(8, 0))
         fim_novo = st.time_input("Hora Fim", value=time(9, 0))
+        obs_novo = st.text_area("Observação - descreva o que vai agendar", placeholder="Ex: ASO, retorno, exame...")
 
     c1, c2 = st.columns(2)
     with c1:
@@ -89,7 +90,8 @@ if st.session_state.mostrar_form:
                     "cliente": cliente_novo,
                     "profissional": profissional_novo,
                     "data": str(data_novo),
-                    "inicio": str(inicio_novo),
+                    "fim": str(fim_novo),
+                    "obs": obs_novo
                     "fim": str(fim_novo)
                 }).execute()
                 st.success(f"Salvo! {cliente_novo} em {data_novo} das {inicio_novo} às {fim_novo}")
