@@ -90,9 +90,9 @@ if st.session_state.mostrar_form:
                     "cliente": cliente_novo,
                     "profissional": profissional_novo,
                     "data": str(data_novo),
+                    "inicio": str(inicio_novo),
                     "fim": str(fim_novo),
                     "obs": obs_novo
-                    "fim": str(fim_novo)
                 }).execute()
                 st.success(f"Salvo! {cliente_novo} em {data_novo} das {inicio_novo} às {fim_novo}")
                 st.session_state.mostrar_form = False
