@@ -46,7 +46,7 @@ st.markdown("""
 
 with st.sidebar:
     st.markdown("### Setores")
-    setor = st.radio("", SETORES, label_visibility="collapsed")
+    setor = st.radio("Setor", SETORES, label_visibility="collapsed")
     st.write("---")
     if st.button("+ Novo Agendamento", use_container_width=True, type="primary"):
         st.session_state.mostrar_form = True
