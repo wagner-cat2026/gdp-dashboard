@@ -51,8 +51,13 @@ with st.sidebar:
     if st.button("+ Novo Agendamento", width="stretch", type="primary"):
         st.session_state.mostrar_form = True
         st.rerun()
-
-if st.session_state.mostrar_form:
+        
+        st.write("---")
+        if st.button("🚪 Sair", width="stretch"):
+            for key in list(st.session_state.keys()):
+                del st.session_state[key]
+            st.rerun()
+if st.session_state.get("mostrar_form", False):
     st.markdown("### Novo Agendamento")
     col1, col2 = st.columns(2)
     with col1:
