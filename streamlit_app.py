@@ -24,7 +24,16 @@ SETORES = ["Recepção", "Visita técnica", "Treinamentos NRs", "Viagens", "Pale
 st.markdown("""
 <style>
 [data-testid="stSidebar"] { background-color: #0F2F5E; }
-[data-testid="stSidebar"] * { color: white; }
+[data-testid="stSidebar"] p, [data-testid="stSidebar"] label, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] span { color: white; }
+[data-testid="stSidebar"] button, [data-testid="stSidebar"] button p, [data-testid="stSidebar"] button span {
+    background-color: white !important;
+    color: #0F2F5E !important;
+    font-weight: bold !important;
+}
+[data-testid="stSidebar"] button:hover, [data-testid="stSidebar"] button:hover p {
+    background-color: #FF4B4B !important;
+    color: white !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
